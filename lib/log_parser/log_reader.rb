@@ -24,7 +24,7 @@ module LogParser
         entries << log_entries(line)
       end
 
-      entries.compact
+      entries.compact!
       check_entries
     rescue Errno::ENOENT
       abort 'file does not exist!'
