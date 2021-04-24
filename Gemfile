@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
-
-# Specify your gem's dependencies in log_parser.gemspec
-gemspec
+source 'https://rubygems.org'
 
 gem "rake", "~> 13.0"
 
-gem "rubocop", "~> 0.80"
+group :development do
+  gem 'rubocop', '~> 0.80' # if not running rubocop in the CI, we can let it as a development dependency
+end
+
+group :test do
+  gem 'rspec'
+end
