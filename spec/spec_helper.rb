@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 require 'log_parser'
+require 'simplecov'
+SimpleCov.start
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

@@ -24,13 +24,26 @@ module LogParser
         entries << log_entries(line)
       end
 
-      entries
+      entries.compact
+      check_entries
     rescue Errno::ENOENT
       abort 'file does not exist!'
     end
 
+    def check_entries
+      return entries if entries.count.positive?
+
+      raise Errno::ENOENT
+    rescue Errno::ENOENT
+      abort 'file is empty or malformed!'
+    end
+
     def log_entries(line)
+      return if line.size.zero?
+
       url, ip = line.split(' ')
+      return unless url && ip
+
       Entries.new(url, ip)
     end
   end

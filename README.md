@@ -1,35 +1,39 @@
 # LogParser
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/log_parser`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Simple log parser which counts how many times a page has been visited based on logfile
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'log_parser'
-```
+First, clone the project.
 
 And then execute:
 
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install log_parser
+`bundle install`
 
 ## Usage
 
-TODO: Write usage instructions here
+This logparser is really simple to use, and has two types of output: Total Number of Visits, and Total Number of Unique Visits
 
-## Development
+To check total number of visits you might run:
+`ruby bin/read_entries.rb fixtures/webserver.log`
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+and for total number of unique visits:
+`ruby bin/read_entries.rb fixtures/webserver.log -u`
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+## Architecture
 
-## Contributing
+This is a simple Ruby app, that accepts a file path as a parameter. Log reader uses an efficient way to read files.
+The way it's implemented it won't blow up the memory, because `each_line` read up until the next newline, return, and pause reading.
+When all lines were read, a printer function is called to show the results.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/log_parser.
+Although the reader is efficient in terms of memory management, we can eventually override it to use other approches. This can be easily done by overriding the reader parameter in the method `call` inside `LogParser::Parse` class.
+
+## What can be done next?
+
+- This app still misses a custom error class, where we can share better error messages with the users.
+- This app also needs a better way to handle the second argument. E.g.: If a user passes an invalid argument as -p the app will bring the total number of page visits, without any messages for the user.
+
+## Tests
+
+To run the whole test suite, you can execute:
+`bundle exec rspec`

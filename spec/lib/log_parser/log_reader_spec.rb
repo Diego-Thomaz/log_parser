@@ -29,6 +29,12 @@ RSpec.describe LogParser::LogReader do
 
         it_behaves_like 'file does not exist!'
       end
+
+      context 'when file is empty' do
+        let(:file_path) { 'spec/fixtures/empty_file.log' }
+
+        it { expect { log_reader }.to raise_error(SystemExit, 'file is empty or malformed!') }
+      end
     end
   end
 end
