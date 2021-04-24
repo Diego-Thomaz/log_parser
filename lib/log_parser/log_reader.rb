@@ -20,7 +20,7 @@ module LogParser
     def read
       raise Errno::ENOENT if log_file.nil?
 
-      File.open(log_file, 'r').each do |line|
+      File.new(log_file).each_line do |line|
         entries << log_entries(line)
       end
 
