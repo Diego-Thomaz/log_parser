@@ -69,5 +69,30 @@ RSpec.describe LogParser::ResultPrinter do
       it { expect(page_uniq_visits).to have_received(:call) }
       it { is_expected.to eq(expected_result) }
     end
+
+    context 'when -a option is passed' do
+      let(:page_average_visits) { instance_spy('LogParser::PageVisits::AveragePageVisits') }
+      let(:options) { '-a' }
+      let(:page_visits_hash) do
+        [
+          { url: '/home', total_visits: 1 },
+          { url: '/about', total_visits: 1 },
+          { url: '/index', total_visits: 1 }
+        ]
+      end
+      let(:expected_result) do
+        "AVERAGE TOTAL VISITS\n/home -> 1\n/about -> 1\n/index -> 1"
+      end
+
+      before do
+        allow(LogParser::PageVisits::AverageTotalVisits).to receive(:new).with(entries).and_return(page_average_visits)
+        allow(page_average_visits).to receive(:call).and_return(page_visits_hash)
+        result_printer
+      end
+
+      it { expect(LogParser::PageVisits::AverageTotalVisits).to have_received(:new) }
+      it { expect(page_average_visits).to have_received(:call) }
+      it { is_expected.to eq(expected_result) }
+    end
   end
 end
